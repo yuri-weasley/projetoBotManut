@@ -1,0 +1,20 @@
+# Google Cloud SDK
+.gcloud/
+
+# Python cache and compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Dependencies
+venv/ 
+
+# Environment variables
+.env
+.flaskenv
+
+# Local credentials
+*.json # CUIDADO: Isso ignora TODOS os arquivos .json. Se você tiver .json que PRECISAM ir para o repo, seja mais específico.
+# Melhor: ignore apenas o arquivo da sua chave de serviço:
+# seu_arquivo_de_credenciais.json

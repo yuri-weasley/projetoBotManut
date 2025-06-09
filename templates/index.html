@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Auxiliar de Manutenção de Aeronaves</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="chat-container">
+      <div class="chat-header">
+        <h3>Assistente de Manutenção de Aeronaves</h3>
+        <p class="bot-description">
+          Seu copiloto inteligente para manuais de manutenção. Envie uma foto de
+          um texto e receba uma explicação simplificada.
+        </p>
+      </div>
+      <div class="chat-messages" id="chat-messages">
+        <div class="message bot-message">
+          <img
+            src="{{ url_for('static', filename='img/mascote.png') }}"
+            alt="Mascote"
+            class="mascot-avatar"
+          />
+          <p>
+            Olá! Sou seu assistente de manutenção de aeronaves. Envie uma foto
+            do manual e eu te ajudarei a entender!
+          </p>
+        </div>
+      </div>
+      <div class="chat-input">
+        <label for="image-upload" class="upload-button">
+          <i class="fas fa-camera"></i>
+          <input
+            type="file"
+            id="image-upload"
+            accept="image/*"
+            capture="environment"
+          />
+        </label>
+      </div>
+      <div class="chat-footer">
+        <p>
+          Criado e desenvolvido por Weslley Yuri - Estudante de Ciência da
+          Computação
+        </p>
+        <p>
+          <a
+            href="https://github.com/yuri-weasley/projetoBotManut"
+            target="_blank"
+            >Repositório do Projeto no GitHub</a
+          >
+        </p>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>

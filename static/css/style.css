@@ -1,0 +1,183 @@
+/* Estilos Gerais e Reset */
+body {
+   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+margin: 0;
+padding: 0;
+background-color: #f0f2f5;
+display: flex;
+justify-content: center;
+align-items: center;
+min-height: 100vh; /* Garante que o body ocupe a altura total da tela */
+overflow: hidden; /* Evita scroll indesejado em alguns casos */
+}
+
+/* Contêiner Principal do Chat */
+.chat-container {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 450px; /* Largura máxima para desktops */
+    height: 100vh; /* Altura total da tela em dispositivos móveis */
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden; /* Para mensagens que podem transbordar */
+}
+
+/* Cabeçalho do Chat */
+.chat-header {
+    background-color: #007bff; /* Azul primário */
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Dentro de .chat-header */
+.chat-header .bot-description {
+    font-size: 0.85em;
+    color: rgba(255, 255, 255, 0.8);
+    margin-top: 5px;
+    margin-bottom: 0;
+    line-height: 1.3;
+}
+
+/* Área de Mensagens */
+.chat-messages {
+    flex-grow: 1; /* Ocupa o espaço restante */
+    padding: 15px;
+    overflow-y: auto; /* Adiciona scroll se as mensagens excederem a altura */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Estilos das Mensagens */
+.message {
+    display: flex;
+    margin-bottom: 15px;
+    align-items: flex-end; /* Alinha o avatar com o início da mensagem */
+}
+
+.message p {
+    max-width: 80%; /* Limita a largura da bolha de mensagem */
+    padding: 10px 15px;
+    border-radius: 20px;
+    line-height: 1.5;
+    word-wrap: break-word; /* Garante que palavras longas quebrem */
+}
+
+/* Mensagens do Bot */
+.bot-message {
+    justify-content: flex-start; /* Alinha à esquerda */
+}
+
+.bot-message p {
+    background-color: #e2e6ea; /* Cinza claro */
+    color: #333;
+    border-bottom-left-radius: 5px; /* Canto inferior esquerdo menos arredondado */
+}
+
+.mascot-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* Torna a imagem circular */
+    margin-right: 10px;
+    object-fit: cover; /* Garante que a imagem preencha o círculo */
+    border: 2px solid #007bff;
+}
+
+/* Mensagens do Usuário (para futuras implementações, como confirmação de envio) */
+.user-message {
+    justify-content: flex-end; /* Alinha à direita */
+}
+
+.user-message p {
+    background-color: #007bff; /* Azul */
+    color: white;
+    border-bottom-right-radius: 5px; /* Canto inferior direito menos arredondado */
+}
+
+/* Área de Input (Upload) */
+.chat-input {
+    padding: 15px;
+    background-color: #f8f9fa; /* Cinza muito claro */
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: center; /* Centraliza o botão de upload */
+}
+
+.upload-button {
+    background-color: #28a745; /* Verde para o botão de upload */
+    color: white;
+    padding: 12px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espaço entre o ícone e o texto (se tivesse texto) */
+    transition: background-color 0.3s ease;
+}
+
+.upload-button:hover {
+    background-color: #218838; /* Verde mais escuro no hover */
+}
+
+.upload-button i {
+    font-size: 1.5em; /* Aumenta o tamanho do ícone */
+}
+
+/* Esconde o input de arquivo padrão */
+#image-upload {
+    display: none;
+}
+
+/* Rodapé do Chat */
+.chat-footer {
+    background-color: #343a40; /* Cinza escuro */
+    color: #f8f9fa; /* Branco levemente cinza */
+    padding: 10px;
+    text-align: center;
+    font-size: 0.75em; /* Tamanho menor para o texto do rodapé */
+    border-top: 1px solid #222;
+}
+
+.chat-footer p {
+    margin: 3px 0; /* Espaçamento entre os parágrafos */
+}
+
+.chat-footer a {
+    color: #87ceeb; /* Azul claro para o link */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.chat-footer a:hover {
+    color: #a8e6ff; /* Cor mais clara no hover */
+    text-decoration: underline;
+}
+
+/* Ajuste para responsividade no rodapé se necessário, mas geralmente não precisa */
+@media (max-width: 600px) {
+    .chat-footer {
+        padding: 8px; /* Ajuste o padding em telas menores */
+    }
+}
+
+/* Responsividade para telas menores (celulares) */
+@media (max-width: 600px) {
+    .chat-container {
+        width: 100vw; /* Ocupa a largura total da viewport */
+        height: 100vh; /* Ocupa a altura total da viewport */
+        border-radius: 0; /* Remove bordas arredondadas em telas pequenas */
+        box-shadow: none; /* Remove sombra em telas pequenas */
+    }
+
+    body {
+        /* Remove o alinhamento central para telas pequenas para ocupar tudo */
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+}

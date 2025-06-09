@@ -1,0 +1,19 @@
+runtime: python312 # Ou python311, se 3.12 ainda der problema (mas é a mais recente)
+env: standard
+entrypoint: gunicorn --error-logfile - --access-logfile - --worker-class gthread --workers=1 --threads=8 app:app
+
+handlers:
+- url: /static
+  static_dir: static
+
+- url: /.*
+  script: auto
+
+automatic_scaling:
+  min_instances: 0
+  max_instances: 1
+  min_idle_instances: 0
+  max_idle_instances: automatic
+  target_cpu_utilization: 0.5
+  target_throughput_utilization: 0.75
+  max_concurrent_requests: 10
