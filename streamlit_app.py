@@ -1,8 +1,9 @@
 import os
 import sys
 import streamlit as st # Importa a biblioteca Streamlit
-from google.cloud import secretmanager
-from google.api_core.exceptions import GoogleAPIError
+
+# from google.cloud import secretmanager
+# from google.api_core.exceptions import GoogleAPIError
 
 import google.generativeai as genai
 from google.cloud import vision
@@ -10,23 +11,13 @@ from google.cloud import translate_v2 as translate
 
 # --- Funções de Configuração e Inicialização de APIs (Mantidas) ---
 
-# Configuração do Secret Manager
-client = secretmanager.SecretManagerServiceClient()
+# --- Não precisamos mais da função get_secret ou do client do Secret Manager ---
+# client = secretmanager.SecretManagerServiceClient()
+# def get_secret(secret_id, project_id):
+#     # ... código removido ...
 
-def get_secret(secret_id, project_id):
-    """Busca um segredo do Google Secret Manager."""
-    secret_name = client.secret_version_path(project_id, secret_id, "latest")
-    try:
-        response = client.access_secret_version(request={"name": secret_name})
-        return response.payload.data.decode("UTF-8")
-    except GoogleAPIError as e:
-        print(f"ERRO: Falha da API do Secret Manager ao acessar o segredo '{secret_id}': {e}", file=sys.stderr)
-        st.error(f"Erro ao carregar o segredo: {secret_id}.") # Feedback no Streamlit
-        st.stop() # Interrompe a execução
-    except Exception as e:
-        print(f"ERRO: Erro inesperado ao acessar o segredo '{secret_id}': {e}", file=sys.stderr)
-        st.error(f"Erro genérico ao carregar o segredo: {secret_id}.") # Feedback no Streamlit
-        st.stop() # Interrompe a execução
+# --- Obter o ID do Projeto da Aplicação (ainda necessário para algumas APIs) ---
+# Primeiro, tenta pegar da variável de ambiente que o Streamlit Cloud vai passar
 
 # Obter o ID do Projeto da Aplicação
 app_project_id = os.getenv('GCP_PROJECT')
@@ -42,7 +33,7 @@ try:
     gemini_api_key = get_secret("google-api-key-gemini", app_project_id)
 except RuntimeError as e:
     st.error(f"ERRO FATAL: Falha ao carregar GOOGLE_API_KEY: {e}")
-    st.stop()
+    st.stop() 
 
 # Inicialização das APIs (usando st.cache_resource para otimizar)
 # st.cache_resource armazena em cache o resultado da função,
