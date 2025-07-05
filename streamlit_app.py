@@ -28,13 +28,6 @@ if not app_project_id:
         st.error("ERRO FATAL: O ID do projeto não foi encontrado nas variáveis de ambiente (GCP_PROJECT ou GOOGLE_CLOUD_PROJECT).")
         st.stop()
 
-# Carregar Chave API Gemini
-# try:
-#    gemini_api_key = st.secrets.get("GOOGLE_API_KEY")
-# except RuntimeError as e:
-#    st.error(f"ERRO FATAL: Falha ao carregar GOOGLE_API_KEY: {e}")
-#    st.stop() 
-
 # Inicialização das APIs (usando st.cache_resource para otimizar)
 # st.cache_resource armazena em cache o resultado da função,
 # garantindo que ela seja executada apenas uma vez.
