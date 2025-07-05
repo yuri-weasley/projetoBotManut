@@ -16,5 +16,7 @@ venv/
 
 # Local credentials
 *.json # CUIDADO: Isso ignora TODOS os arquivos .json. Se você tiver .json que PRECISAM ir para o repo, seja mais específico.
+venv/
+gcp-credentials.json
 # Melhor: ignore apenas o arquivo da sua chave de serviço:
 # seu_arquivo_de_credenciais.json
