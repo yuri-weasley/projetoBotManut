@@ -8,26 +8,22 @@ from google.cloud import translate_v2 as translate
 
 # --- Funções de Configuração e Inicialização de APIs ---
 
-# --- Obter o ID do Projeto da Aplicação E a Chave API Gemini dos segredos do Streamlit ---
-# Esta é a parte crítica que faltava ou estava incorreta
+# --- 1. Carregar ID do Projeto e Chave API Gemini DOS SEGREDOS DO STREAMLIT ---
+# Esta é a seção crítica para o deploy no Streamlit Cloud.
+# Asseguramos que essas variáveis existam antes de qualquer outra coisa.
 
-# Carregar o ID do Projeto
 app_project_id = st.secrets.get("GCP_PROJECT")
 if not app_project_id:
     st.error("ERRO FATAL: O ID do projeto (GCP_PROJECT) não foi encontrado nos segredos do Streamlit. Por favor, configure-o no painel do Streamlit Cloud.")
     st.stop()
 
-# Carregar Chave API Gemini
 gemini_api_key = st.secrets.get("GOOGLE_API_KEY")
-
-# Adição de Debug temporário (pode remover depois que funcionar)
 if not gemini_api_key:
     st.error("ERRO FATAL: A chave GOOGLE_API_KEY está vazia ou não foi carregada dos segredos do Streamlit. Por favor, verifique a configuração.")
     st.stop()
-# else:
-#     st.success("DEBUG: GOOGLE_API_KEY carregada com sucesso (valor não exibido por segurança).") # Comente ou remova esta linha se não quiser a mensagem de debug
 
-# Inicialização das APIs (usando st.cache_resource para otimizar)
+# --- 2. Inicialização das APIs (usando st.cache_resource para otimizar) ---
+# Esta função só será executada uma vez quando o app iniciar.
 @st.cache_resource
 def initialize_api_clients(api_key):
     """Inicializa os clientes das APIs Google Cloud."""
@@ -36,18 +32,19 @@ def initialize_api_clients(api_key):
         # Modelo para simplificação de texto
         global_text_model = genai.GenerativeModel('gemini-1.5-flash')
         
+        # Para Vision e Translate, elas usarão as credenciais padrão,
+        # que no Streamlit Cloud geralmente são o ambiente em que a API Key é usada,
+        # mas se houver erro aqui, teremos que pensar em credenciais de serviço.
         vision_client = vision.ImageAnnotatorClient()
         translate_client = translate.Client()
 
         return global_text_model, vision_client, translate_client
     except Exception as e:
-        # Erro mais específico se a API Key estiver errada ou faltar permissão nas APIs
-        st.error(f"ERRO FATAL: Falha ao inicializar clientes das APIs Google Cloud. Verifique sua GOOGLE_API_KEY e as permissões de API no GCP: {e}")
+        st.error(f"ERRO FATAL: Falha ao inicializar clientes das APIs Google Cloud. Verifique sua GOOGLE_API_KEY e as permissões de API no GCP. Detalhes: {e}")
         st.stop()
 
-# Chama a função de inicialização uma única vez
+# --- 3. Chama a função de inicialização uma única vez (APÓS chaves estarem carregadas) ---
 global_text_model, vision_client, translate_client = initialize_api_clients(gemini_api_key)
-
 
 # --- Funções de Processamento de Imagem/Texto (Mantidas) ---
 
