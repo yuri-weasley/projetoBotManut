@@ -2,35 +2,32 @@ import os
 import sys
 import streamlit as st # Importa a biblioteca Streamlit
 
-# from google.cloud import secretmanager
-# from google.api_core.exceptions import GoogleAPIError
-
 import google.generativeai as genai
 from google.cloud import vision
 from google.cloud import translate_v2 as translate
 
-# --- Funções de Configuração e Inicialização de APIs (Mantidas) ---
+# --- Funções de Configuração e Inicialização de APIs ---
 
-# --- Não precisamos mais da função get_secret ou do client do Secret Manager ---
-# client = secretmanager.SecretManagerServiceClient()
-# def get_secret(secret_id, project_id):
-#     # ... código removido ...
+# --- Obter o ID do Projeto da Aplicação E a Chave API Gemini dos segredos do Streamlit ---
+# Esta é a parte crítica que faltava ou estava incorreta
 
-# --- Obter o ID do Projeto da Aplicação (ainda necessário para algumas APIs) ---
-# Primeiro, tenta pegar da variável de ambiente que o Streamlit Cloud vai passar
-
-# Obter o ID do Projeto da Aplicação
-app_project_id = os.getenv('GCP_PROJECT')
-
+# Carregar o ID do Projeto
+app_project_id = st.secrets.get("GCP_PROJECT")
 if not app_project_id:
-    app_project_id = os.getenv('GOOGLE_CLOUD_PROJECT')
-    if not app_project_id:
-        st.error("ERRO FATAL: O ID do projeto não foi encontrado nas variáveis de ambiente (GCP_PROJECT ou GOOGLE_CLOUD_PROJECT).")
-        st.stop()
+    st.error("ERRO FATAL: O ID do projeto (GCP_PROJECT) não foi encontrado nos segredos do Streamlit. Por favor, configure-o no painel do Streamlit Cloud.")
+    st.stop()
+
+# Carregar Chave API Gemini
+gemini_api_key = st.secrets.get("GOOGLE_API_KEY")
+
+# Adição de Debug temporário (pode remover depois que funcionar)
+if not gemini_api_key:
+    st.error("ERRO FATAL: A chave GOOGLE_API_KEY está vazia ou não foi carregada dos segredos do Streamlit. Por favor, verifique a configuração.")
+    st.stop()
+# else:
+#     st.success("DEBUG: GOOGLE_API_KEY carregada com sucesso (valor não exibido por segurança).") # Comente ou remova esta linha se não quiser a mensagem de debug
 
 # Inicialização das APIs (usando st.cache_resource para otimizar)
-# st.cache_resource armazena em cache o resultado da função,
-# garantindo que ela seja executada apenas uma vez.
 @st.cache_resource
 def initialize_api_clients(api_key):
     """Inicializa os clientes das APIs Google Cloud."""
@@ -44,7 +41,8 @@ def initialize_api_clients(api_key):
 
         return global_text_model, vision_client, translate_client
     except Exception as e:
-        st.error(f"ERRO FATAL: Falha ao inicializar clientes das APIs Google Cloud: {e}")
+        # Erro mais específico se a API Key estiver errada ou faltar permissão nas APIs
+        st.error(f"ERRO FATAL: Falha ao inicializar clientes das APIs Google Cloud. Verifique sua GOOGLE_API_KEY e as permissões de API no GCP: {e}")
         st.stop()
 
 # Chama a função de inicialização uma única vez
