@@ -24,8 +24,7 @@ O objetivo é agilizar a consulta de informações complexas, tornando o trabalh
 
 O bot de Manutenção está atualmente hospedado no Google Cloud App Engine.
 
-**Acesse o Chatbot:** https://plucky-mile-460423-g0.rj.r.appspot.com/
-
+**Acesse o Chatbot:** https://botmanut78gav.streamlit.app/
 ---
 
 ## 🛠️ Tecnologias Utilizadas
