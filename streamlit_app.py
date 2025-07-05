@@ -30,7 +30,7 @@ if not app_project_id:
 
 # Carregar Chave API Gemini
 # try:
-#    gemini_api_key = get_secret("google-api-key-gemini", app_project_id)
+#    gemini_api_key = st.secrets.get("GOOGLE_API_KEY")
 # except RuntimeError as e:
 #    st.error(f"ERRO FATAL: Falha ao carregar GOOGLE_API_KEY: {e}")
 #    st.stop() 
