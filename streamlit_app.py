@@ -18,6 +18,7 @@ if not app_project_id:
     st.stop()
 
 gemini_api_key = st.secrets.get("GOOGLE_API_KEY")
+
 if not gemini_api_key:
     st.error("ERRO FATAL: A chave GOOGLE_API_KEY está vazia ou não foi carregada dos segredos do Streamlit. Por favor, verifique a configuração.")
     st.stop()
