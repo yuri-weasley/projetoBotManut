@@ -1,19 +1,20 @@
 import os
 import sys
-import json # <--- NOVO IMPORT: Para lidar com JSON
-import streamlit as st # Importa a biblioteca Streamlit
+import json
+import streamlit as st
 
 import google.generativeai as genai
 from google.cloud import vision
 from google.cloud import translate_v2 as translate
-from google.oauth2 import service_account # <--- NOVO IMPORT: Para credenciais de serviço
+from google.oauth2 import service_account
 
 # --- Funções de Configuração e Inicialização de APIs ---
 
 # --- 1. Carregar ID do Projeto e Chave API Gemini DOS SEGREDOS DO STREAMLIT ---
+# DESCOMENTE E USE DIRETAMENTE OS SEUS SEGREDS PARA ESSAS VARIÁVEIS
 app_project_id = st.secrets.get("GCP_PROJECT")
 if not app_project_id:
-    st.error("ERRO FATAL: O ID do projeto (GCP_PROJECT) não foi encontrado nos segredos do  Streamlit. Por favor, configure-o no painel do Streamlit Cloud.")
+    st.error("ERRO FATAL: O ID do projeto (GCP_PROJECT) não foi encontrado nos segredos do Streamlit. Por favor, configure-o no painel do Streamlit Cloud.")
     st.stop()
 
 gemini_api_key = st.secrets.get("GOOGLE_API_KEY")
