@@ -11,15 +11,35 @@ from google.oauth2 import service_account # <--- NOVO IMPORT: Para credenciais d
 # --- Funções de Configuração e Inicialização de APIs ---
 
 # --- 1. Carregar ID do Projeto e Chave API Gemini DOS SEGREDOS DO STREAMLIT ---
-app_project_id = st.secrets.get("GCP_PROJECT")
-if not app_project_id:
-    st.error("ERRO FATAL: O ID do projeto (GCP_PROJECT) não foi encontrado nos segredos do Streamlit. Por favor, configure-o no painel do Streamlit Cloud.")
-    st.stop()
+# app_project_id = st.secrets.get("GCP_PROJECT")
+# if not app_project_id:
+#     st.error("ERRO FATAL: O ID do projeto (GCP_PROJECT) não foi encontrado nos segredos do # Streamlit. Por favor, configure-o no painel do Streamlit Cloud.")
+#     st.stop()
+#
+# gemini_api_key = st.secrets.get("GOOGLE_API_KEY")
+# if not gemini_api_key:
+#     st.error("ERRO FATAL: A chave GOOGLE_API_KEY está vazia ou não foi carregada dos segredos do Streamlit. Por favor, verifique a configuração.")
+#     st.stop()
 
-gemini_api_key = st.secrets.get("GOOGLE_API_KEY")
-if not gemini_api_key:
-    st.error("ERRO FATAL: A chave GOOGLE_API_KEY está vazia ou não foi carregada dos segredos do Streamlit. Por favor, verifique a configuração.")
-    st.stop()
+@st.cache_resource
+def get_service_account_info():
+    """
+    Monta o dicionário de informações da conta de serviço a partir dos segredos do Streamlit.
+    """
+    service_account_info = {
+        "type": st.secrets["GCP_TYPE"],
+        "project_id": st.secrets["GCP_PROJECT_ID"],
+        "private_key_id": st.secrets["GCP_PRIVATE_KEY_ID"],
+        "private_key": st.secrets["GCP_PRIVATE_KEY"], # Já deve estar escapada corretamente
+        "client_email": st.secrets["GCP_CLIENT_EMAIL"],
+        "client_id": st.secrets["GCP_CLIENT_ID"],
+        "auth_uri": st.secrets["GCP_AUTH_URI"],
+        "token_uri": st.secrets["GCP_TOKEN_URI"],
+        "auth_provider_x509_cert_url": st.secrets["GCP_AUTH_PROVIDER_X509_CERT_URL"],
+        "client_x509_cert_url": st.secrets["GCP_CLIENT_X509_CERT_URL"],
+        "universe_domain": st.secrets["GCP_UNIVERSE_DOMAIN"],
+    }
+    return service_account_info
 
 # --- 2. Carregar Credenciais da Conta de Serviço ---
 service_account_info = st.secrets.get("GCP_SERVICE_ACCOUNT_CREDENTIALS")
