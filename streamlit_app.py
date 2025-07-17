@@ -1,51 +1,60 @@
 import os
 import sys
+import json # <--- NOVO IMPORT: Para lidar com JSON
 import streamlit as st # Importa a biblioteca Streamlit
 
 import google.generativeai as genai
 from google.cloud import vision
 from google.cloud import translate_v2 as translate
+from google.oauth2 import service_account # <--- NOVO IMPORT: Para credenciais de serviço
 
 # --- Funções de Configuração e Inicialização de APIs ---
 
 # --- 1. Carregar ID do Projeto e Chave API Gemini DOS SEGREDOS DO STREAMLIT ---
-# Esta é a seção crítica para o deploy no Streamlit Cloud.
-# Asseguramos que essas variáveis existam antes de qualquer outra coisa.
-
 app_project_id = st.secrets.get("GCP_PROJECT")
 if not app_project_id:
     st.error("ERRO FATAL: O ID do projeto (GCP_PROJECT) não foi encontrado nos segredos do Streamlit. Por favor, configure-o no painel do Streamlit Cloud.")
     st.stop()
 
 gemini_api_key = st.secrets.get("GOOGLE_API_KEY")
-
 if not gemini_api_key:
     st.error("ERRO FATAL: A chave GOOGLE_API_KEY está vazia ou não foi carregada dos segredos do Streamlit. Por favor, verifique a configuração.")
     st.stop()
 
-# --- 2. Inicialização das APIs (usando st.cache_resource para otimizar) ---
-# Esta função só será executada uma vez quando o app iniciar.
+# --- 2. Carregar Credenciais da Conta de Serviço ---
+service_account_info = st.secrets.get("GCP_SERVICE_ACCOUNT_CREDENTIALS")
+if not service_account_info:
+    st.error("ERRO FATAL: As credenciais da conta de serviço (GCP_SERVICE_ACCOUNT_CREDENTIALS) não foram encontradas nos segredos do Streamlit. Por favor, configure-as.")
+    st.stop()
+
+try:
+    # Converte a string JSON em um dicionário Python
+    credentials_json = json.loads(service_account_info)
+    # Cria o objeto de credenciais de serviço
+    credentials = service_account.Credentials.from_service_account_info(credentials_json)
+except Exception as e:
+    st.error(f"ERRO FATAL: Falha ao carregar credenciais da conta de serviço. Verifique o formato JSON nos segredos do Streamlit: {e}")
+    st.stop()
+
+# --- 3. Inicialização das APIs (usando st.cache_resource para otimizar) ---
 @st.cache_resource
-def initialize_api_clients(api_key):
+def initialize_api_clients(gemini_key, gcp_credentials):
     """Inicializa os clientes das APIs Google Cloud."""
     try:
-        genai.configure(api_key=api_key)
-        # Modelo para simplificação de texto
+        genai.configure(api_key=gemini_key)
         global_text_model = genai.GenerativeModel('gemini-1.5-flash')
         
-        # Para Vision e Translate, elas usarão as credenciais padrão,
-        # que no Streamlit Cloud geralmente são o ambiente em que a API Key é usada,
-        # mas se houver erro aqui, teremos que pensar em credenciais de serviço.
-        vision_client = vision.ImageAnnotatorClient()
-        translate_client = translate.Client()
+        # Inicializa Vision e Translate com as credenciais da conta de serviço
+        vision_client = vision.ImageAnnotatorClient(credentials=gcp_credentials)
+        translate_client = translate.Client(credentials=gcp_credentials)
 
         return global_text_model, vision_client, translate_client
     except Exception as e:
-        st.error(f"ERRO FATAL: Falha ao inicializar clientes das APIs Google Cloud. Verifique sua GOOGLE_API_KEY e as permissões de API no GCP. Detalhes: {e}")
+        st.error(f"ERRO FATAL: Falha ao inicializar clientes das APIs Google Cloud. Verifique suas credenciais e permissões de API no GCP. Detalhes: {e}")
         st.stop()
 
-# --- 3. Chama a função de inicialização uma única vez (APÓS chaves estarem carregadas) ---
-global_text_model, vision_client, translate_client = initialize_api_clients(gemini_api_key)
+# --- 4. Chama a função de inicialização uma única vez ---
+global_text_model, vision_client, translate_client = initialize_api_clients(gemini_api_key, credentials)
 
 # --- Funções de Processamento de Imagem/Texto (Mantidas) ---
 
