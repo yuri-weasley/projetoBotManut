@@ -11,15 +11,15 @@ from google.oauth2 import service_account # <--- NOVO IMPORT: Para credenciais d
 # --- Funções de Configuração e Inicialização de APIs ---
 
 # --- 1. Carregar ID do Projeto e Chave API Gemini DOS SEGREDOS DO STREAMLIT ---
-# app_project_id = st.secrets.get("GCP_PROJECT")
-# if not app_project_id:
-#     st.error("ERRO FATAL: O ID do projeto (GCP_PROJECT) não foi encontrado nos segredos do # Streamlit. Por favor, configure-o no painel do Streamlit Cloud.")
-#     st.stop()
-#
-# gemini_api_key = st.secrets.get("GOOGLE_API_KEY")
-# if not gemini_api_key:
-#     st.error("ERRO FATAL: A chave GOOGLE_API_KEY está vazia ou não foi carregada dos segredos do Streamlit. Por favor, verifique a configuração.")
-#     st.stop()
+app_project_id = st.secrets.get("GCP_PROJECT")
+if not app_project_id:
+    st.error("ERRO FATAL: O ID do projeto (GCP_PROJECT) não foi encontrado nos segredos do  Streamlit. Por favor, configure-o no painel do Streamlit Cloud.")
+    st.stop()
+
+gemini_api_key = st.secrets.get("GOOGLE_API_KEY")
+if not gemini_api_key:
+    st.error("ERRO FATAL: A chave GOOGLE_API_KEY está vazia ou não foi carregada dos segredos do Streamlit. Por favor, verifique a configuração.")
+    st.stop()
 
 @st.cache_resource
 def get_service_account_info():
@@ -42,19 +42,23 @@ def get_service_account_info():
     return service_account_info
 
 # --- 2. Carregar Credenciais da Conta de Serviço ---
-service_account_info = st.secrets.get("GCP_SERVICE_ACCOUNT_CREDENTIALS")
-if not service_account_info:
-    st.error("ERRO FATAL: As credenciais da conta de serviço (GCP_SERVICE_ACCOUNT_CREDENTIALS) não foram encontradas nos segredos do Streamlit. Por favor, configure-as.")
-    st.stop()
+# REMOVA OU COMENTE ESTE BLOCO INTEIRO
+# service_account_info = st.secrets.get("GCP_SERVICE_ACCOUNT_CREDENTIALS")
+# if not service_account_info:
+#     st.error("ERRO FATAL: As credenciais da conta de serviço (GCP_SERVICE_ACCOUNT_CREDENTIALS) não foram encontradas nos segredos do Streamlit. Por favor, configure-as.")
+#     st.stop()
 
-try:
-    # Converte a string JSON em um dicionário Python
-    credentials_json = json.loads(service_account_info)
-    # Cria o objeto de credenciais de serviço
-    credentials = service_account.Credentials.from_service_account_info(credentials_json)
-except Exception as e:
-    st.error(f"ERRO FATAL: Falha ao carregar credenciais da conta de serviço. Verifique o formato JSON nos segredos do Streamlit: {e}")
-    st.stop()
+# try:
+#     credentials_json = json.loads(service_account_info)
+#     credentials = service_account.Credentials.from_service_account_info(credentials_json)
+# except Exception as e:
+#     st.error(f"ERRO FATAL: Falha ao carregar credenciais da conta de serviço. Verifique o formato JSON nos segredos do Streamlit: {e}")
+#     st.stop()
+
+# --- USE ESTAS DUAS LINHAS PARA OBTER AS CREDENCIAIS ---
+credentials_dict = get_service_account_info()
+credentials = service_account.Credentials.from_service_account_info(credentials_dict)
+# ----------------------------------------------------
 
 # --- 3. Inicialização das APIs (usando st.cache_resource para otimizar) ---
 @st.cache_resource
