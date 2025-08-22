@@ -11,7 +11,6 @@ from google.oauth2 import service_account
 # --- Funções de Configuração e Inicialização de APIs ---
 
 # --- 1. Carregar ID do Projeto e Chave API Gemini DOS SEGREDOS DO STREAMLIT ---
-# DESCOMENTE E USE DIRETAMENTE OS SEUS SEGREDS PARA ESSAS VARIÁVEIS
 app_project_id = st.secrets.get("GCP_PROJECT")
 if not app_project_id:
     st.error("ERRO FATAL: O ID do projeto (GCP_PROJECT) não foi encontrado nos segredos do Streamlit. Por favor, configure-o no painel do Streamlit Cloud.")
@@ -22,44 +21,20 @@ if not gemini_api_key:
     st.error("ERRO FATAL: A chave GOOGLE_API_KEY está vazia ou não foi carregada dos segredos do Streamlit. Por favor, verifique a configuração.")
     st.stop()
 
-@st.cache_resource
-def get_service_account_info():
-    """
-    Monta o dicionário de informações da conta de serviço a partir dos segredos do Streamlit.
-    """
-    service_account_info = {
-        "type": st.secrets["GCP_TYPE"],
-        "project_id": st.secrets["GCP_PROJECT_ID"],
-        "private_key_id": st.secrets["GCP_PRIVATE_KEY_ID"],
-        "private_key": st.secrets["GCP_PRIVATE_KEY"], # Já deve estar escapada corretamente
-        "client_email": st.secrets["GCP_CLIENT_EMAIL"],
-        "client_id": st.secrets["GCP_CLIENT_ID"],
-        "auth_uri": st.secrets["GCP_AUTH_URI"],
-        "token_uri": st.secrets["GCP_TOKEN_URI"],
-        "auth_provider_x509_cert_url": st.secrets["GCP_AUTH_PROVIDER_X509_CERT_URL"],
-        "client_x509_cert_url": st.secrets["GCP_CLIENT_X509_CERT_URL"],
-        "universe_domain": st.secrets["GCP_UNIVERSE_DOMAIN"],
-    }
-    return service_account_info
-
 # --- 2. Carregar Credenciais da Conta de Serviço ---
-# REMOVA OU COMENTE ESTE BLOCO INTEIRO
-# service_account_info = st.secrets.get("GCP_SERVICE_ACCOUNT_CREDENTIALS")
-# if not service_account_info:
-#     st.error("ERRO FATAL: As credenciais da conta de serviço (GCP_SERVICE_ACCOUNT_CREDENTIALS) não foram encontradas nos segredos do Streamlit. Por favor, configure-as.")
-#     st.stop()
+# AGORA O CÓDIGO ESTÁ NO LUGAR CERTO, FORA DE QUALQUER DECORATOR
+service_account_info = st.secrets.get("GCP_SERVICE_ACCOUNT_CREDENTIALS")
+if not service_account_info:
+    st.error("ERRO FATAL: As credenciais da conta de serviço (GCP_SERVICE_ACCOUNT_CREDENTIALS) não foram encontradas nos segredos do Streamlit. Por favor, configure-as.")
+    st.stop()
 
-# try:
-#     credentials_json = json.loads(service_account_info)
-#     credentials = service_account.Credentials.from_service_account_info(credentials_json)
-# except Exception as e:
-#     st.error(f"ERRO FATAL: Falha ao carregar credenciais da conta de serviço. Verifique o formato JSON nos segredos do Streamlit: {e}")
-#     st.stop()
+try:
+    credentials_json = json.loads(service_account_info)
+    credentials = service_account.Credentials.from_service_account_info(credentials_json)
+except Exception as e:
+    st.error(f"ERRO FATAL: Falha ao carregar credenciais da conta de serviço. Verifique o formato JSON nos segredos do Streamlit: {e}")
+    st.stop()
 
-# --- USE ESTAS DUAS LINHAS PARA OBTER AS CREDENCIAIS ---
-credentials_dict = get_service_account_info()
-credentials = service_account.Credentials.from_service_account_info(credentials_dict)
-# ----------------------------------------------------
 
 # --- 3. Inicialização das APIs (usando st.cache_resource para otimizar) ---
 @st.cache_resource
@@ -155,16 +130,13 @@ Esta ferramenta utiliza **Visão Computacional (OCR)**, **Tradução Automática
 uploaded_file = st.file_uploader("Envie uma imagem com a instrução de manutenção", type=["png", "jpg", "jpeg"])
 
 if uploaded_file is not None:
-    # Exibe a imagem carregada
     st.image(uploaded_file, caption='Imagem Carregada.', use_column_width=True)
     st.write("")
     st.info("Processando a imagem... Por favor, aguarde.")
 
-    # Lê o conteúdo da imagem
     image_content = uploaded_file.read()
 
     try:
-        # 1. Detectar texto na imagem (OCR)
         with st.spinner('Detectando texto (OCR) na imagem...'):
             original_text_from_ocr = detect_text_from_image(image_content)
         
@@ -175,7 +147,6 @@ if uploaded_file is not None:
         st.subheader("Texto Detectado (OCR):")
         st.write(original_text_from_ocr)
 
-        # 2. Detectar e traduzir idioma
         with st.spinner('Traduzindo texto, se necessário...'):
             processed_text = detect_and_translate_language(original_text_from_ocr)
         
@@ -185,12 +156,11 @@ if uploaded_file is not None:
         else:
             st.info("O texto detectado já está em português ou não exigiu tradução.")
 
-        # 3. Simplificar o texto com a Gemini API
         with st.spinner('Simplificando a instrução com Gemini AI...'):
             simplified_explanation = simplify_text_with_gemini(processed_text)
         
         st.subheader("Instrução Simplificada (Gemini AI):")
-        st.success(simplified_explanation) # Exibe o resultado em destaque
+        st.success(simplified_explanation)
 
     except Exception as e:
         st.error(f"Ocorreu um erro inesperado durante o processamento: {str(e)}")
