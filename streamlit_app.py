@@ -3,6 +3,35 @@ import sys
 import json
 import streamlit as st
 
+st.markdown("""
+<style>
+/* Estilizando o botão de upload de arquivo */
+div[data-testid="stFileUploader"] button {
+    background-color: #007BFF; /* Cor de fundo azul */
+    color: white; /* Cor do texto (para contraste) */
+    border-radius: 5px; /* Bordas arredondadas */
+    border: 1px solid #007BFF; /* Borda da mesma cor */
+}
+
+/* Efeito ao passar o mouse (hover) */
+div[data-testid="stFileUploader"] button:hover {
+    background-color: #0056b3; /* Um tom de azul mais escuro no hover */
+    border-color: #0056b3;
+}
+
+/* Efeito ao clicar (active) */
+div[data-testid="stFileUploader"] button:active {
+    background-color: #004494; /* Um azul ainda mais escuro */
+    border-color: #004494;
+}
+
+/* Opcional: Estilizando o ícone de upload (o clipe) */
+div[data-testid="stFileUploader"] svg {
+    fill: white; /* Cor do ícone branco */
+}
+</style>
+""", unsafe_allow_html=True)
+
 import google.generativeai as genai
 from google.cloud import vision
 from google.cloud import translate_v2 as translate
