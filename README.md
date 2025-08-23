@@ -22,7 +22,7 @@ O objetivo é agilizar a consulta de informações complexas, tornando o trabalh
 
 ## 🚀 Como Acessar o Chatbot (Em Produção)
 
-O bot de Manutenção está atualmente hospedado no Google Cloud App Engine.
+O bot de Manutenção está atualmente hospedado no Streamlit.
 
 **Acesse o Chatbot:** https://botmanut.streamlit.app/
 ---
@@ -196,7 +196,8 @@ Este projeto foi concebido e desenvolvido por:
 
 ## 🌟 Agradecimentos Especiais
 
-* À comunidade Python: Pelo ecossistema robusto e flexível de bibliotecas e ferramentas.
-* À comunidade de código aberto e aos desenvolvedores do [Flask](https://flask.palletsprojects.com/en/stable/), [Gunicorn](https://gunicorn.org/) e bibliotecas do [Google Cloud](https://cloud.google.com).
-* Um agradecimento especial à comunidade do [Projeto Jupyter](https://jupyter.org/) e ao [Google Colab](https://colab.research.google.com/), cujas ferramentas foram essenciais para o desenvolvimento, prototipagem e experimentação inicial das funcionalidades de IA deste projeto. A facilidade de uso e o ambiente colaborativo do Colab aceleraram significativamente o progresso.
+* À comunidade Python: Pelo ecossistema robusto e flexível de bibliotecas e ferramentas;
+* À comunidade de código aberto e aos desenvolvedores do [Flask](https://flask.palletsprojects.com/en/stable/), [Gunicorn](https://gunicorn.org/) e bibliotecas do [Google Cloud](https://cloud.google.com);
+* Um agradecimento especial à comunidade do [Projeto Jupyter](https://jupyter.org/) e ao [Google Colab](https://colab.research.google.com/), cujas ferramentas foram essenciais para o desenvolvimento, prototipagem e experimentação inicial das funcionalidades de IA deste projeto. A facilidade de uso e o ambiente colaborativo do Colab aceleraram significativamente o progresso;
+* Gostaria de expressar minha profunda gratidão ao [Streamlit](https://streamlit.app/), incrível plataforma de código aberto que não apenas simplificou o desenvolvimento deste aplicativo, mas também o hospeda de forma gratuita, permitindo que a aplicação rode de forma bonita e acessível a todos;
 * À seção de Célula do 7°/8° GAv pelo valioso feedback durante a fase de testes.
