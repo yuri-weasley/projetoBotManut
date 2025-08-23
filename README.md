@@ -20,6 +20,19 @@ O objetivo é agilizar a consulta de informações complexas, tornando o trabalh
 
 ---
 
+## 🎯 Por que Utilizar o Bot de Manutenção?
+
+A documentação técnica, como manuais e diagramas de aeronaves, é vasta, complexa e muitas vezes escrita em outro idioma. Para os técnicos de manutenção, isso pode significar tempo gasto em buscas e traduções ineficazes.
+
+O BotManut resolve este problema de maneira inteligente:
+* **Contextualização Técnica:** Diferente de tradutores genéricos que apenas traduzem palavras, o chatbot compreende o contexto técnico da manutenção. Ele não apenas traduz, mas simplifica procedimentos e termos específicos do setor, fornecendo respostas precisas e relevantes;
+* **Eficiência e Produtividade:** Em vez de folhear páginas ou lutar com aplicativos de tradução que podem não ter um vocabulário técnico, os técnicos podem simplesmente tirar uma foto de um manual e receber uma explicação clara e concisa em segundos;
+* **Redução de Erros:** Uma compreensão mais rápida e precisa dos procedimentos minimiza o risco de erros, garantindo que as tarefas de manutenção sejam executadas com segurança e eficácia.
+
+Em resumo, o bot não é apenas uma ferramenta de tradução, mas sim um assistente inteligente projetado para ser um parceiro no dia a dia do técnico, otimizando o fluxo de trabalho e garantindo a clareza da informação.
+
+---
+
 ## 🚀 Como Acessar o Chatbot (Em Produção)
 
 O bot de Manutenção está atualmente hospedado no Streamlit App.
