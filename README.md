@@ -22,7 +22,7 @@ O objetivo é agilizar a consulta de informações complexas, tornando o trabalh
 
 ## 🚀 Como Acessar o Chatbot (Em Produção)
 
-O bot de Manutenção está atualmente hospedado no Streamlit.
+O bot de Manutenção está atualmente hospedado no Streamlit App.
 
 **Acesse o Chatbot:** https://botmanut.streamlit.app/
 ---
@@ -32,7 +32,7 @@ O bot de Manutenção está atualmente hospedado no Streamlit.
 * **Backend:** Python 3.12
 * **Framework Web:** Flask
 * **Servidor WSGI:** Gunicorn
-* **Hospedagem:** Google Cloud App Engine (Standard Environment)
+* **Hospedagem:** Streamlit App
 * **APIs de IA do Google Cloud:**
     * Google Gemini API (para geração de texto simplificado)
     * Google Cloud Vision API (para OCR e análise de imagens)
@@ -165,7 +165,7 @@ Durante o desenvolvimento e deploy deste chatbot, alguns desafios foram encontra
     * **Problema:** Após o deploy bem-sucedido e a aplicação no ar, o chatbot falhava ao processar imagens com a mensagem "API key not valid".
     * **Solução:** A chave da Gemini API configurada no `app.yaml` havia sido copiada incorretamente ou estava inválida. A solução foi gerar uma nova chave de API no Google AI Studio (ou verificar a existente) e garantir que ela fosse colada corretamente no `app.yaml` (entre aspas duplas e sem restrições de IP).
 
-5. **Bug 3: `UnhashableParamError` ao usar `st.cache_resource`**
+5. **`UnhashableParamError` ao usar `st.cache_resource`**
     * **Problema:** Ao tentar fazer o deploy do aplicativo no streamlit, a aplicação falhava com um erro `UnhashableParamError`, especificamente em um parâmetro do tipo `google.oauth2.service_account.Credentials`. Este erro ocorria porque a função decorada com `@st.cache_resource` não conseguia criar um "hash" para o objeto de credenciais do Google, que é um tipo de dado complexo e não-hashable.
     **Solução:** A solução foi informar ao Streamlit para ignorar o parâmetro de credenciais ao calcular o hash de cache. Isso é feito adicionando um sublinhado (`_`) no início do nome do parâmetro na assinatura da função.
 
