@@ -38,15 +38,15 @@ except Exception as e:
 
 # --- 3. Inicialização das APIs (usando st.cache_resource para otimizar) ---
 @st.cache_resource
-def initialize_api_clients(gemini_key, gcp_credentials):
+def initialize_api_clients(gemini_key, _credentials):
     """Inicializa os clientes das APIs Google Cloud."""
     try:
         genai.configure(api_key=gemini_key)
         global_text_model = genai.GenerativeModel('gemini-1.5-flash')
         
         # Inicializa Vision e Translate com as credenciais da conta de serviço
-        vision_client = vision.ImageAnnotatorClient(credentials=gcp_credentials)
-        translate_client = translate.Client(credentials=gcp_credentials)
+        vision_client = vision.ImageAnnotatorClient(credentials=_credentials)
+        translate_client = translate.Client(credentials=_credentials)
 
         return global_text_model, vision_client, translate_client
     except Exception as e:
