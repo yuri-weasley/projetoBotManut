@@ -24,11 +24,6 @@ div[data-testid="stFileUploader"] button:active {
     background-color: #004494; /* Um azul ainda mais escuro */
     border-color: #004494;
 }
-
-/* Opcional: Estilizando o ícone de upload (o clipe) */
-div[data-testid="stFileUploader"] svg {
-    fill: white; /* Cor do ícone branco */
-}
 </style>
 """, unsafe_allow_html=True)
 
