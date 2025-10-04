@@ -66,7 +66,7 @@ def initialize_api_clients(gemini_key, _credentials):
     """Inicializa os clientes das APIs Google Cloud."""
     try:
         genai.configure(api_key=gemini_key)
-        global_text_model = genai.GenerativeModel('gemini-1.5-flash')
+        global_text_model = genai.GenerativeModel('gemini-2.5-flash')
         
         # Inicializa Vision e Translate com as credenciais da conta de serviço
         vision_client = vision.ImageAnnotatorClient(credentials=_credentials)
